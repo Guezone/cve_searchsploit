@@ -11,6 +11,7 @@ import csv
 import time
 import random
 import sys
+import shutil
 
 import requests
 import progressbar
@@ -68,6 +69,8 @@ def update_db():
 
     print ("Refreshing exploit-database repo with latest exploits")
     os.system("cd %s/exploit-database/; git pull origin master" % pdir)
+    shutil.rmtree(pdir + "/exploit-database/exploits" , ignore_errors=True)
+    shutil.rmtree(pdir + "/exploit-database/shellcode" , ignore_errors=True)
 
     files = open(pdir + "/exploit-database/files_exploits.csv")
     reader = csv.reader(files)
@@ -302,6 +305,8 @@ def main():
 if not os.path.isdir(pdir + "/exploit-database"):
     print ("Cloning exploit-database repository")
     os.system("cd %s; git clone https://github.com/offensive-security/exploit-database" % pdir)
+    shutil.rmtree(pdir + "/exploit-database/exploits" , ignore_errors=True)
+    shutil.rmtree(pdir + "/exploit-database/shellcode" , ignore_errors=True)
 
 with open(pdir + "/exploitdb_mapping_cve.json") as data_file:
     cve_map = json.load(data_file)
